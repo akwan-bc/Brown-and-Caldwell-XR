@@ -1,4 +1,4 @@
-FROM jupyter/minimal-notebook
+FROM quay.io/jupyter/minimal-notebook
 WORKDIR /code
 ADD requirements.txt requirements.txt
 RUN pip install -r requirements.txt

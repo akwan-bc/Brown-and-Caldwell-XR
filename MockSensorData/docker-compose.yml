@@ -7,7 +7,7 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - ./copacetic:/copacetic
-      - /mnt/c/ephemeral/data/kaggle:/kaggle
+      - ./copacetic:/code/copacetic
+      - /mnt/c/ephemeral/data/kaggle:/code/kaggle
     stdin_open: true
     tty: true 
