@@ -9,3 +9,4 @@
 1.  Inside the container, run `jupyter lab --ip=0.0.0.0 --port=8080 --no-browser`
 2.  In a browser, open up `http://127.0.0.1:8080/lab?token=[token value]`
 
+## Useful commands
