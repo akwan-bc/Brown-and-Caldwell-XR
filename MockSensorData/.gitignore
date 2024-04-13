@@ -1,5 +1,4 @@
 .ipynb_checkpoints/
 
 # ignore excel files and png files
-*.xlsx
 *.png
