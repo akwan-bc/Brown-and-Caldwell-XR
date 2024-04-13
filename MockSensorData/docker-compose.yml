@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 1883:1883
+      - 8080:8080
     volumes:
       - ./copacetic:/code/copacetic
       - /mnt/c/ephemeral/data/kaggle:/code/kaggle
