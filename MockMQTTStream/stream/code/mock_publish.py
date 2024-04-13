@@ -7,7 +7,8 @@ import pandas as pd
 import paho.mqtt.client as mqtt
 from paho.mqtt.enums import CallbackAPIVersion
 
-logging.basicConfig(stream=sys.stdout, level=logging.INFO, format="%(message)s")
+logging.basicConfig(stream=sys.stdout, level=logging.INFO, 
+    format='%(asctime)s - %(levelname)s - %(filename)s - %(lineno)d - %(message)s')
 log = logging.getLogger(__name__)
 
 MQTT_PORT = 1883
@@ -15,11 +16,12 @@ MQTT_TOPIC = 'mock'
 
 def eval_args():
 
-    # Create the parser
+    # Create the parser,
     parser = argparse.ArgumentParser(description='Process MQTT host and wait time.')
 
     parser.add_argument('--mqtthost', type=str, default='172.24.0.1', help='MQTT host address')
     parser.add_argument('--waittime', type=int, default=1, help='Wait time in seconds')
+    parser.add_argument('--maxiter', type=int, default=5, help="Max iterations")
 
     return parser.parse_args()
 
@@ -47,6 +49,8 @@ def main():
         r.wait_for_publish()
         sleep(args.waittime)
         log.info(index)
+        if index > args.maxiter:
+            break
 
 
 if __name__ == '__main__':
