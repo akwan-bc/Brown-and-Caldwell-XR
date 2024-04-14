@@ -26,47 +26,38 @@ def on_connect(mqttc, obj, flags, reason_code, properties):
     mqttc.subscribe(MQTT_TOPIC, 0)
 
 # Define the callback for when a PUBLISH message is received from the server
-def on_message(mqttc, obj, msg):
-    global message_count
+def on_message(mqttc, userdata, msg):
+    userdata['message_count'] += 1
     log.info(f"Received message '{msg.payload.decode()}' on topic '{msg.topic}' with QoS {msg.qos}")
-    message_count += 1
+    if userdata['message_count'] >= userdata['maxmessages']:
+        mqttc.loop_stop()
 
 
 def eval_args():
-
-    # Create the parser
     parser = argparse.ArgumentParser(description='Process MQTT host and wait time.')
-
     parser.add_argument('--mqtthost', type=str, default='172.24.0.1', help='MQTT host address')
     parser.add_argument('--maxmessages', type=int, default=60, help="number of messages before ending")
-
+    parser.add_argument('--timeout', type=int, default=30, help="time in seconds before ending")
     return parser.parse_args()
 
 
 def main():
-
     args = eval_args()
-    # Assign the callbacks
+    userdata = {'message_count': 0, 'maxmessages': args.maxmessages}
+    client.user_data_set(userdata)
     client.on_connect = on_connect
     client.on_message = on_message
 
     log.debug("before connect")
-    # Connect to the MQTT server
     client.connect(args.mqtthost, MQTT_PORT, 20)
 
     client.loop_start()
-    # Blocking call that processes network traffic, dispatches callbacks and
-    # handles reconnecting.
-    # Other loop*() functions are available that give a threaded interface and a
-    # manual interface.
     log.debug("after connect")
 
-    # Wait for the specified time or until the message count is reached
-    while message_count < args.maxmessages:
+    start_time = time.time()  # Record the start time
+    while (time.time() - start_time) < args.timeout:
         time.sleep(1)
 
-    # Stop the loop and disconnect
-    client.loop_stop()
     client.disconnect()
 
 
