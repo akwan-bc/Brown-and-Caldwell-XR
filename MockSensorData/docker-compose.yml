@@ -1,0 +1,13 @@
+version: "3.1"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    volumes:
+      - ./copacetic:/code/copacetic
+      - /mnt/c/ephemeral/data/kaggle:/code/kaggle
+    stdin_open: true
+    tty: true 
